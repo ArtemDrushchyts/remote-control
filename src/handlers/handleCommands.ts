@@ -1,5 +1,6 @@
 import { WebSocket, createWebSocketStream } from 'ws';
 import { mouse, left, right, up, down } from "@nut-tree/nut-js";
+import { drawCircle } from './drawCircle';
 
 export const handleCommands = async (ws: WebSocket) => {
     const wsStream = createWebSocketStream(ws, {encoding: 'utf8', decodeStrings: false});
@@ -30,7 +31,8 @@ export const handleCommands = async (ws: WebSocket) => {
                     wsStream.write(`mouse_position ${x}px,${y}px`)
                     break;
                 case 'draw_circle':
-                    console.log('draw_circle')
+                    drawCircle(+offset);
+                    wsStream.write('draw_circle')
                     break;
                 case 'draw_rectangle':
                     console.log('draw_rectangle')
