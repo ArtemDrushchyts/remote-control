@@ -3,6 +3,7 @@ import { mouse, left, right, up, down } from "@nut-tree/nut-js";
 import { drawCircle } from './drawCircle';
 import { drawSquare } from './drawSquare';
 import { drawRectangle } from './drawRectangle';
+import { printScreen } from './printScreen';
 
 export const handleCommands = async (ws: WebSocket) => {
     const wsStream = createWebSocketStream(ws, {encoding: 'utf8', decodeStrings: false});
@@ -45,7 +46,8 @@ export const handleCommands = async (ws: WebSocket) => {
                     wsStream.write('draw_square')
                     break;
                 case 'prnt_scrn':
-                    console.log('prnt_scrn')
+                    const buffer:string = await printScreen()
+                    wsStream.write(`prnt_scrn ${buffer}`)
                     break;
                 default: 
                     console.log(`Command ${cmd} not found`)
