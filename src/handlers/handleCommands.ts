@@ -8,6 +8,7 @@ export const handleCommands = async (ws: WebSocket) => {
         try {
             const [cmd, ...args] = data.toString().split(' ');
             const [offset] = args;
+            const { x, y } = await mouse.getPosition();
             switch(cmd) {
                 case 'mouse_up':
                     await mouse.move(up(+offset));
@@ -26,7 +27,7 @@ export const handleCommands = async (ws: WebSocket) => {
                     wsStream.write(`mouse_right_${offset}`)
                     break;
                 case 'mouse_position':
-                    console.log('mouse_position')
+                    wsStream.write(`mouse_position ${x}px,${y}px`)
                     break;
                 case 'draw_circle':
                     console.log('draw_circle')
