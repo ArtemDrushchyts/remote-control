@@ -1,7 +1,8 @@
 import { mouse, Button, Point, straightTo } from "@nut-tree/nut-js";
+import { defaultMouseSpeed } from '../constants/constants';
 
 export const drawCircle = async (radius: number) => {
-    mouse.config.mouseSpeed = 500;
+    mouse.config.mouseSpeed = defaultMouseSpeed;
     let position = await mouse.getPosition();
     await mouse.pressButton(Button.LEFT);
     for(let i = 360; i >= 0; i--) {

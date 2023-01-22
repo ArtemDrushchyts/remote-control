@@ -1,0 +1,1 @@
+export const defaultMouseSpeed: number = 500;

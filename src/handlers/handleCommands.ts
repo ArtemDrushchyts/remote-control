@@ -1,6 +1,8 @@
 import { WebSocket, createWebSocketStream } from 'ws';
 import { mouse, left, right, up, down } from "@nut-tree/nut-js";
 import { drawCircle } from './drawCircle';
+import { drawSquare } from './drawSquare';
+import { drawRectangle } from './drawRectangle';
 
 export const handleCommands = async (ws: WebSocket) => {
     const wsStream = createWebSocketStream(ws, {encoding: 'utf8', decodeStrings: false});
@@ -8,45 +10,46 @@ export const handleCommands = async (ws: WebSocket) => {
     wsStream.on("data", async (data: Buffer) => {
         try {
             const [cmd, ...args] = data.toString().split(' ');
-            const [offset] = args;
+            const [arg1, arg2] = args;
             const { x, y } = await mouse.getPosition();
             switch(cmd) {
                 case 'mouse_up':
-                    await mouse.move(up(+offset));
-                    wsStream.write(`mouse_up_${offset}`)
+                    await mouse.move(up(+arg1));
+                    wsStream.write(`mouse_up_${arg1}`)
                     break;
                 case 'mouse_down':
-                    await mouse.move(down(+offset))
-                    wsStream.write(`mouse_down_${offset}`)
+                    await mouse.move(down(+arg1))
+                    wsStream.write(`mouse_down_${arg1}`)
                     break;
                 case 'mouse_left':
-                    await mouse.move(left(+offset))
-                    wsStream.write(`mouse_left_${offset}`)
+                    await mouse.move(left(+arg1))
+                    wsStream.write(`mouse_left_${arg1}`)
                     break;
                 case 'mouse_right':
-                    await mouse.move(right(+offset))
-                    wsStream.write(`mouse_right_${offset}`)
+                    await mouse.move(right(+arg1))
+                    wsStream.write(`mouse_right_${arg1}`)
                     break;
                 case 'mouse_position':
                     wsStream.write(`mouse_position ${x}px,${y}px`)
                     break;
                 case 'draw_circle':
-                    drawCircle(+offset);
+                    drawCircle(+arg1);
                     wsStream.write('draw_circle')
                     break;
                 case 'draw_rectangle':
-                    console.log('draw_rectangle')
+                    drawRectangle(+arg1, +arg2)
+                    wsStream.write('draw_rectangle')
                     break;
                 case 'draw_square':
-                    console.log('draw_square')
+                    drawSquare(+arg1)
+                    wsStream.write('draw_square')
                     break;
                 case 'prnt_scrn':
                     console.log('prnt_scrn')
                     break;
                 default: 
-                    console.log(cmd)
+                    console.log(`Command ${cmd} not found`)
             }
-
         } catch (err) {
             console.log(err);
         }
